@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion{% endblock title %}
 
 {% block content %}
 <h2>Connexion</h2>
@@ -9,4 +9,4 @@
   {{ form.as_p }}
   <button type="submit">Se connecter</button>
 </form>
-{% endblock %}
+{% endblock content %}
