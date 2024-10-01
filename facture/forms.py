@@ -1,11 +1,11 @@
 from django import forms
-from .models import facture
+from .models import Factures
 
 
 class FactureForm(forms.ModelForm):
 
     class Meta:
-        model = facture
+        model = Factures
         fields = (
-            'nom_du_client', 'facture_date', 'facture_relance', 'photo_de_la_facture',
+            'nom_client', 'facture_date', 'facture_relance', 'photo_facture',
         )

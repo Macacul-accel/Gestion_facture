@@ -1,13 +1,8 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
-from .views import facture_image_view, success
+from . import views
 
 urlpatterns = [
-    path('upload/', facture_image_view, name='upload'),
-    path('success/', success, name='sucess'),
+    path('upload/', views.facture_upload, name='upload'),
+    path('facture_image/', views.display_facture_view, name='facture_image'),
+    path('<int:pk>/', views.delete_facture, name='delete_facture'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
