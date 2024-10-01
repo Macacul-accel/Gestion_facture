@@ -33,10 +33,12 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
-    username = None
-    first_name = models.CharField(max_length=100)
+    username = models.CharField(max_length=150)
+    first_name = models.CharField('Prénom', max_length=100)
     email = models.EmailField(_('Adresse mail'), unique=True)
-    phone_number = models.CharField(max_length=13, blank=True)
+    phone_number = models.CharField('Téléphone', max_length=13, blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'phone_number']
+    REQUIRED_FIELDS = ['first_name', 'phone_number', 'username']
+
+    objects = UserManager()

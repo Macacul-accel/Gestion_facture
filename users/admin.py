@@ -21,6 +21,3 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'phone_number', 'is_staff', 'is_active',)
     search_fields = ('email',)
     ordering = ('email',)
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
