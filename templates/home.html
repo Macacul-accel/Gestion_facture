@@ -3,9 +3,10 @@
 {% block title %}HomePage{% endblock title %}
 
 {% block content %}
+
 {% if request.user.is_authenticated %}
   Bonjour {{ request.user.first_name }}!
-  <p><a href="{% url 'facture_image' %}">Voir les factures</a>
+  <p><a href="{% url 'list' %}">Voir les factures</a>
     <a href="{% url 'upload' %}">Enregistrer une nouvelle facture</a></p>
   <p><a href="{% url 'logout' %}">Déconnexion</a></p>
 {% else %}

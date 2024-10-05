@@ -4,10 +4,13 @@
 
 {% block content %}
 
-{% if fact_img_obj %}  <h3>Facture enregistrée!</h3> 
+{% if fact_img_obj %}
+<h3>Facture enregistrée!</h3> 
 {{ fact_img_obj.nom_client }}
  <p><img src="{{ fact_img_obj.photo_facture.url}}"  style="max-height:300px"></p>
 {% endif %}
+<p><a href="{% url 'list' %}">Voir mes factures</a></p>
+<p><a href="{% url 'upload' %}">Enregistrer une autre facture</a></p>
 <p><a href="{% url 'home' %}">Retourner à l'espace client</a></p>
 
 {% endblock content %}

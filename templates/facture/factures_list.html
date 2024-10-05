@@ -9,12 +9,16 @@
 </script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
 </script>
+<a href="{% url 'home' %}">Retour vers la page d'accueil</a>
+<p><a href="{% url 'upload' %}">Enregistrer une autre facture</a></p>
 {% endblock head %}
 
 {% block content %}
 
-{% for facture in facture_image %}
+{% if request.user.is_authenticated %}
+    {% for facture in fact_list %}
             <div class="col-md-4">
+                    <p>{{ facture.nom_facture }}</p>
                     <p>{{ facture.nom_client }}</p>
                     <p>Facture du {{ facture.facture_date }}</p>
                     <img src="{{ facture.photo_facture.url }}" class="img-responsive" style="width: 100%; float: left; margin-right: 10px;" />
@@ -26,5 +30,8 @@
                     </form></p>
             </div>
     {% endfor %}
+{% else %}
+    {% include 'home.html' %}
+{% endif %}
 
 {% endblock content %}

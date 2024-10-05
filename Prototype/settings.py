@@ -110,7 +110,7 @@ LANGUAGE_CODE = 'fr-FR'
 
 TIME_ZONE = 'Europe/Paris'
 
-USE_I18N = False
+USE_I18N = True
 
 USE_TZ = True
 
@@ -130,5 +130,6 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+USER_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'users_<int:id>')
 
-DATE_INPUT_FORMATS = ['%d/%m/%Y' ]
+DATE_INPUT_FORMATS = ['%d/%M/%Y']

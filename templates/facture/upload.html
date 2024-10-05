@@ -2,12 +2,18 @@
 
 {% block title %}Enregistrement facture{% endblock title %}
 
+
 {% block content %}
 
+{% if request.user.is_authenticated %}
+<p><a href="{% url 'home' %}">Retour à la page d'accueil</a></p>
 <form method ="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Upload</button>
+    <button type="submit">Enregistrer</button>
 </form>
+{% else %}
+    {% include 'home.html' %}
+{% endif %}
 
 {% endblock content %}
