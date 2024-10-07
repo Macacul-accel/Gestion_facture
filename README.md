@@ -13,7 +13,7 @@ L'idée du site est de permettre aux petites entreprises, ainsi que les auto ent
 2. **Activer l'environnement virtuel (Optionnel)**
    ```bash
    python -m venv .env
-   source .env/bin/activate  # Sur Windows: `venv\Scripts\activate`
+   source .env/bin/activate  # Sur Windows: `.env\Scripts\activate`
    ```
 
 3. **Installer les packages nécessaires**
