@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
 
 {% block title %}Enregistrement facture{% endblock title %}
 
+{% block head %}
+<link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.min.css' %}" rel="stylesheet">
+<link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.structure.min.css' %}" rel="stylesheet">
+<link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.theme.min.css' %}" rel="stylesheet">
+{% endblock head %}
 
 {% block content %}
 
@@ -9,11 +17,14 @@
 <p><a href="{% url 'home' %}">Retour à la page d'accueil</a></p>
 <form method ="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|crispy }}
     <button type="submit">Enregistrer</button>
 </form>
 {% else %}
     {% include 'home.html' %}
 {% endif %}
 
+<script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+<script src="{% static 'js/jquery-ui-1.14.0/jquery-ui.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 {% endblock content %}

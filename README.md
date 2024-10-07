@@ -6,8 +6,8 @@ L'idée du site est de permettre aux petites entreprises, ainsi que les auto ent
 ## Installation
 1. **Cloner le Repo**
    ```bash
-   git clone https://github.com/Macacul-accel/Prototype.git
-   cd Prototype
+   git clone https://github.com/Macacul-accel/Gestion_facture.git
+   cd Gestion_facture
    ```
 
 2. **Activer l'environnement virtuel (Optionnel)**
