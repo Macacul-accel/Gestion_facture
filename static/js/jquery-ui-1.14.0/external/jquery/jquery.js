@@ -159,7 +159,7 @@ var version = "3.7.1",
 		return new jQuery.fn.init( selector, context );
 	};
 
-jQuery.fn = jQuery.gestion_facture = {
+jQuery.fn = jQuery.prototype = {
 
 	// The current version of jQuery being used
 	jquery: version,
@@ -288,7 +288,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 			for ( name in options ) {
 				copy = options[ name ];
 
-				// Prevent Object.gestion_facture pollution
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
 				if ( name === "__proto__" || target === copy ) {
 					continue;
@@ -349,12 +349,12 @@ jQuery.extend( {
 
 		proto = getProto( obj );
 
-		// Objects with no gestion_facture (e.g., `Object.create( null )`) are plain
+		// Objects with no prototype (e.g., `Object.create( null )`) are plain
 		if ( !proto ) {
 			return true;
 		}
 
-		// Objects with gestion_facture are plain iff they were constructed by a global Object function
+		// Objects with prototype are plain iff they were constructed by a global Object function
 		Ctor = hasOwn.call( proto, "constructor" ) && proto.constructor;
 		return typeof Ctor === "function" && fnToString.call( Ctor ) === ObjectFunctionString;
 	},
@@ -950,7 +950,7 @@ function createCache() {
 
 	function cache( key, value ) {
 
-		// Use (key + " ") to avoid collision with native gestion_facture properties
+		// Use (key + " ") to avoid collision with native prototype properties
 		// (see https://github.com/jquery/sizzle/issues/157)
 		if ( keys.push( key + " " ) > Expr.cacheLength ) {
 
@@ -1471,7 +1471,7 @@ find.attr = function( elem, name ) {
 
 	var fn = Expr.attrHandle[ name.toLowerCase() ],
 
-		// Don't get fooled by Object.gestion_facture properties (see trac-13807)
+		// Don't get fooled by Object.prototype properties (see trac-13807)
 		val = fn && hasOwn.call( Expr.attrHandle, name.toLowerCase() ) ?
 			fn( elem, name, !documentIsHTML ) :
 			undefined;
@@ -2081,7 +2081,7 @@ for ( i in { submit: true, reset: true } ) {
 
 // Easy API for creating new setFilters
 function setFilters() {}
-setFilters.gestion_facture = Expr.filters = Expr.pseudos;
+setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
 function tokenize( selector, parseOnly ) {
@@ -2956,8 +2956,8 @@ var rootjQuery,
 		return jQuery.makeArray( selector, this );
 	};
 
-// Give the init function the jQuery gestion_facture for later instantiation
-init.gestion_facture = jQuery.fn;
+// Give the init function the jQuery prototype for later instantiation
+init.prototype = jQuery.fn;
 
 // Initialize central reference
 rootjQuery = jQuery( document );
@@ -3099,7 +3099,7 @@ jQuery.each( {
 
 			// Support: IE 11+
 			// <object> elements with no `data` attribute has an object
-			// `contentDocument` with a `null` gestion_facture.
+			// `contentDocument` with a `null` prototype.
 			getProto( elem.contentDocument ) ) {
 
 			return elem.contentDocument;
@@ -3973,7 +3973,7 @@ function Data() {
 
 Data.uid = 1;
 
-Data.gestion_facture = {
+Data.prototype = {
 
 	cache: function( owner ) {
 
@@ -5192,7 +5192,7 @@ jQuery.event = {
 					for ( i = 0; i < delegateCount; i++ ) {
 						handleObj = handlers[ i ];
 
-						// Don't conflict with Object.gestion_facture properties (trac-13203)
+						// Don't conflict with Object.prototype properties (trac-13203)
 						sel = handleObj.selector + " ";
 
 						if ( matchedSelectors[ sel ] === undefined ) {
@@ -5221,7 +5221,7 @@ jQuery.event = {
 	},
 
 	addProp: function( name, hook ) {
-		Object.defineProperty( jQuery.Event.gestion_facture, name, {
+		Object.defineProperty( jQuery.Event.prototype, name, {
 			enumerable: true,
 			configurable: true,
 
@@ -5463,7 +5463,7 @@ jQuery.Event = function( src, props ) {
 
 // jQuery.Event is based on DOM3 Events as specified by the ECMAScript Language Binding
 // https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
-jQuery.Event.gestion_facture = {
+jQuery.Event.prototype = {
 	constructor: jQuery.Event,
 	isDefaultPrevented: returnFalse,
 	isPropagationStopped: returnFalse,
@@ -7033,11 +7033,11 @@ jQuery.fn.extend( {
 
 
 function Tween( elem, options, prop, end, easing ) {
-	return new Tween.gestion_facture.init( elem, options, prop, end, easing );
+	return new Tween.prototype.init( elem, options, prop, end, easing );
 }
 jQuery.Tween = Tween;
 
-Tween.gestion_facture = {
+Tween.prototype = {
 	constructor: Tween,
 	init: function( elem, options, prop, end, easing, unit ) {
 		this.elem = elem;
@@ -7081,7 +7081,7 @@ Tween.gestion_facture = {
 	}
 };
 
-Tween.gestion_facture.init.gestion_facture = Tween.gestion_facture;
+Tween.prototype.init.prototype = Tween.prototype;
 
 Tween.propHooks = {
 	_default: {
@@ -7142,7 +7142,7 @@ jQuery.easing = {
 	_default: "swing"
 };
 
-jQuery.fx = Tween.gestion_facture.init;
+jQuery.fx = Tween.prototype.init;
 
 // Back compat <1.8 extension point
 jQuery.fx.step = {};

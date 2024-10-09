@@ -1,14 +1,46 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>{% block title %}{% endblock title %}</title>
-  {% block head %}{% endblock head %}
-</head>
-<body lang="fr">
-  <main>
+    <head>
+        <meta charset="utf-8">
+
+        <title>HomePage</title>
+
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/navbar-fixed.css' %}" rel="stylesheet">
+  </head>
+  <body>
     {% block content %}
+<nav class="navbar navbar-expand-md fixed-top" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">Django Project</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Accueil</a>
+            <a class="nav-link disabled" aria-disabled="true">Factures</a>
+            <a class="nav-link disabled" aria-disabled="true">À venir</a>
+        </div>
+    </div>
+        <div class="navbar-nav">
+    <a class="nav-link" href="{% url 'signup' %}">Inscription</a>
+    <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+        </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="bg-body-tertiary p-5 rounded">
+    <h1>Gestion de factures</h1>
+    <p><h3>Description</h3></p>
+    <p class="lead">Premier projet avec Django.</p>
+    <a class="btn btn-lg btn-primary" href="{% url 'signup' %}" role="button">S'inscrire</a>
+  </div>
+</main>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     {% endblock %}
-  </main>
-</body>
+    </body>
 </html>

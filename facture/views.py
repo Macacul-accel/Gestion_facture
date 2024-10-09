@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import FactureForm
 from .models import Factures
-from users.models import CustomUser
 
 # Create your views here.
 
@@ -25,12 +24,19 @@ def facture_upload(request):
 
 def display_facture_view(request):
     if request.method == "GET":
-        fct = Factures.objects.filter(user=request.user)
-        return render(request, 'facture/factures_list.html',
-                       {'fact_list': fct})
+        if request.user.is_anonymous:
+            return redirect('homepage')
+        else:
+            fct = Factures.objects.filter(user=request.user)
+            return render(request, 'facture/factures_list.html',
+                           {'fact_list': fct})
+
 
 def delete_facture(request, pk):
     if request.method == "POST":
         fct = Factures.objects.get(pk=pk)
         fct.delete()
     return redirect('list')
+
+def user_action(request):
+    return render(request, 'facture/user_action.html')

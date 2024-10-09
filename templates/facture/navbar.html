@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-md fixed-top" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Django Project</a>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'user_action' %}">Factures</a>
+            <a class="nav-link disabled" aria-disabled="true">À venir</a>
+          </div>
+      </div>
+            <div class="navbar-nav">
+        <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
+            </div>
+    </div>
+  </nav>

@@ -1,37 +1,61 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Visionnage facture{% endblock title %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
 
-{% block head %}
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-</script>
-<a href="{% url 'home' %}">Retour vers la page d'accueil</a>
-<p><a href="{% url 'upload' %}">Enregistrer une autre facture</a></p>
-{% endblock head %}
+        <title>Visionnage facture</title>
 
-{% block content %}
 
-{% if request.user.is_authenticated %}
-    {% for facture in fact_list %}
-            <div class="col-md-4">
-                    <p>{{ facture.nom_facture }}</p>
-                    <p>{{ facture.nom_client }}</p>
-                    <p>Facture du {{ facture.facture_date }}</p>
-                    <img src="{{ facture.photo_facture.url }}" class="img-responsive" style="width: 100%; float: left; margin-right: 10px;" />
-                    <p>Date de paiement avant le {{ facture.facture_relance }}</p>
-                    <p>
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/stylesheet.css' %}" rel="stylesheet">
+    <link href="{% static 'css/navbar-fixed.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    {% block content %}
+    {% if request.user.is_authenticated %}
+    {% include 'facture/navbar.html' %}
+      <main class="container">
+        <div class="bg-body-tertiary p-5 rounded">
+            <p><a class="btn btn-md btn-primary" href="{% url 'upload' %}">Enregistrer une facture</a></p>
+            {% if fact_list %}
+            <h3>Vos factures</h3>
+            <table>
+                <tr>
+                    <th>Nom facture</th>
+                    <th>Nom client</th>
+                    <th>Facture du</th>
+                    <th>Photo facture</th>
+                    <th>Date de paiement</th>
+                </tr>
+                {% for facture in fact_list %}
+                <tr>
+                    <td>{{ facture.nom_facture }}</td>
+                    <td>{{ facture.nom_client }}</td>
+                    <td>{{ facture.facture_date }}</td>
+                    <td><a class="btn btn-sm btn-primary" href="{{ facture.photo_facture.url }}">Facture</a></td>
+                    <td>{{ facture.facture_relance }}</td>
+                    <td>
                         <form method="post" action="{% url 'delete_facture' facture.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                    </form></p>
-            </div>
-    {% endfor %}
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+        <h2>Vous n'avez aucune facture enregistrée</h2>
+        {% endif %}
+        </div>
+      </main>
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 {% else %}
-    {% include 'home.html' %}
-{% endif %}
-
-{% endblock content %}
+{% include 'base.html' %}
+    {% endif %}
+    {% endblock %}
+    </body>
+</html>

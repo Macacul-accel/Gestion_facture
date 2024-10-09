@@ -1,30 +1,42 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
 
-{% block title %}Enregistrement facture{% endblock title %}
+        <title>Enregistrement facture</title>
 
-{% block head %}
 <link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.min.css' %}" rel="stylesheet">
 <link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.structure.min.css' %}" rel="stylesheet">
 <link href="{% static 'js/jquery-ui-1.14.0/jquery-ui.theme.min.css' %}" rel="stylesheet">
-{% endblock head %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-{% block content %}
-
-{% if request.user.is_authenticated %}
-<p><a href="{% url 'home' %}">Retour à la page d'accueil</a></p>
-<form method ="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit">Enregistrer</button>
-</form>
-{% else %}
-    {% include 'home.html' %}
-{% endif %}
-
-<script src="{% static 'js/jquery-3.7.1.js' %}"></script>
-<script src="{% static 'js/jquery-ui-1.14.0/jquery-ui.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-{% endblock content %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/navbar-fixed.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    {% block content %}
+    {% if request.user.is_authenticated %}
+    {% include 'facture/navbar.html' %}
+      <main class="container">
+        <div class="bg-body-tertiary p-5 rounded">
+            <p><a class="btn btn-md btn-primary" href="{% url 'list' %}">Voir mes factures</a></p>
+            <form method ="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn btn-md btn-primary" type="submit">Enregistrer</button>
+            </form>
+        </div>
+      </main>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'js/jquery-ui-1.14.0/jquery-ui.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+    {% else %}
+    {% include 'base.html' %}
+    {% endif %}
+    {% endblock %}
+    </body>
+</html>

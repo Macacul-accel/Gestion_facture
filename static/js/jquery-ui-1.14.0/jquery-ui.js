@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.14.0 - 2024-10-07
+/*! jQuery UI - v1.14.0 - 2024-10-08
 * https://jqueryui.com
 * Includes: widget.js, position.js, data.js, disable-selection.js, focusable.js, form-reset-mixin.js, jquery-patch.js, keycode.js, labels.js, scroll-parent.js, tabbable.js, unique-id.js, widgets/draggable.js, widgets/droppable.js, widgets/resizable.js, widgets/selectable.js, widgets/sortable.js, widgets/accordion.js, widgets/autocomplete.js, widgets/button.js, widgets/checkboxradio.js, widgets/controlgroup.js, widgets/datepicker.js, widgets/dialog.js, widgets/menu.js, widgets/mouse.js, widgets/progressbar.js, widgets/selectmenu.js, widgets/slider.js, widgets/spinner.js, widgets/tabs.js, widgets/tooltip.js, effect.js, effects/effect-blind.js, effects/effect-bounce.js, effects/effect-clip.js, effects/effect-drop.js, effects/effect-explode.js, effects/effect-fade.js, effects/effect-fold.js, effects/effect-highlight.js, effects/effect-puff.js, effects/effect-pulsate.js, effects/effect-scale.js, effects/effect-shake.js, effects/effect-size.js, effects/effect-slide.js, effects/effect-transfer.js
 * Copyright OpenJS Foundation and other contributors; Licensed MIT */
@@ -40,8 +40,8 @@ var version = $.ui.version = "1.14.0";
 
 
 var widgetUuid = 0;
-var widgetHasOwnProperty = Array.gestion_facture.hasOwnProperty;
-var widgetSlice = Array.gestion_facture.slice;
+var widgetHasOwnProperty = Array.prototype.hasOwnProperty;
+var widgetSlice = Array.prototype.slice;
 
 $.cleanData = ( function( orig ) {
 	return function( elems ) {
@@ -58,10 +58,10 @@ $.cleanData = ( function( orig ) {
 	};
 } )( $.cleanData );
 
-$.widget = function( name, base, gestion_facture ) {
+$.widget = function( name, base, prototype ) {
 	var existingConstructor, constructor, basePrototype;
 
-	// ProxiedPrototype allows the provided gestion_facture to remain unmodified
+	// ProxiedPrototype allows the provided prototype to remain unmodified
 	// so that it can be used as a mixin for multiple widgets (#8876)
 	var proxiedPrototype = {};
 
@@ -69,13 +69,13 @@ $.widget = function( name, base, gestion_facture ) {
 	name = name.split( "." )[ 1 ];
 	var fullName = namespace + "-" + name;
 
-	if ( !gestion_facture ) {
-		gestion_facture = base;
+	if ( !prototype ) {
+		prototype = base;
 		base = $.Widget;
 	}
 
-	if ( Array.isArray( gestion_facture ) ) {
-		gestion_facture = $.extend.apply( null, [ {} ].concat( gestion_facture ) );
+	if ( Array.isArray( prototype ) ) {
+		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
 	}
 
 	// Create selector for plugin
@@ -101,11 +101,11 @@ $.widget = function( name, base, gestion_facture ) {
 
 	// Extend with the existing constructor to carry over any static properties
 	$.extend( constructor, existingConstructor, {
-		version: gestion_facture.version,
+		version: prototype.version,
 
-		// Copy the object used to create the gestion_facture in case we need to
+		// Copy the object used to create the prototype in case we need to
 		// redefine the widget later
-		_proto: $.extend( {}, gestion_facture ),
+		_proto: $.extend( {}, prototype ),
 
 		// Track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
@@ -115,21 +115,21 @@ $.widget = function( name, base, gestion_facture ) {
 	basePrototype = new base();
 
 	// We need to make the options hash a property directly on the new instance
-	// otherwise we'll modify the options hash on the gestion_facture that we're
+	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
-	$.each( gestion_facture, function( prop, value ) {
+	$.each( prototype, function( prop, value ) {
 		if ( typeof value !== "function" ) {
 			proxiedPrototype[ prop ] = value;
 			return;
 		}
 		proxiedPrototype[ prop ] = ( function() {
 			function _super() {
-				return base.gestion_facture[ prop ].apply( this, arguments );
+				return base.prototype[ prop ].apply( this, arguments );
 			}
 
 			function _superApply( args ) {
-				return base.gestion_facture[ prop ].apply( this, args );
+				return base.prototype[ prop ].apply( this, args );
 			}
 
 			return function() {
@@ -149,7 +149,7 @@ $.widget = function( name, base, gestion_facture ) {
 			};
 		} )();
 	} );
-	constructor.gestion_facture = $.widget.extend( basePrototype, {
+	constructor.prototype = $.widget.extend( basePrototype, {
 
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
@@ -165,12 +165,12 @@ $.widget = function( name, base, gestion_facture ) {
 	// If this widget is being redefined then we need to find all widgets that
 	// are inheriting from it and redefine all of them so that they inherit from
 	// the new version of this widget. We're essentially trying to replace one
-	// level in the gestion_facture chain.
+	// level in the prototype chain.
 	if ( existingConstructor ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
-			var childPrototype = child.gestion_facture;
+			var childPrototype = child.prototype;
 
-			// Redefine the child widget using the same gestion_facture that was
+			// Redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
 			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
 				child._proto );
@@ -219,7 +219,7 @@ $.widget.extend = function( target ) {
 };
 
 $.widget.bridge = function( name, object ) {
-	var fullName = object.gestion_facture.widgetFullName || name;
+	var fullName = object.prototype.widgetFullName || name;
 	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string";
 		var args = widgetSlice.call( arguments, 1 );
@@ -290,7 +290,7 @@ $.widget.bridge = function( name, object ) {
 $.Widget = function( /* options, element */ ) {};
 $.Widget._childConstructors = [];
 
-$.Widget.gestion_facture = {
+$.Widget.prototype = {
 	widgetName: "widget",
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
@@ -720,7 +720,7 @@ $.Widget.gestion_facture = {
 };
 
 $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
-	$.Widget.gestion_facture[ "_" + method ] = function( element, options, callback ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
 		if ( typeof options === "string" ) {
 			options = { effect: options };
 		}
@@ -1882,7 +1882,7 @@ var widgetsMouse = $.widget( "ui.mouse", {
 var plugin = $.ui.plugin = {
 	add: function( module, option, set ) {
 		var i,
-			proto = $.ui[ module ].gestion_facture;
+			proto = $.ui[ module ].prototype;
 		for ( i in set ) {
 			proto.plugins[ i ] = proto.plugins[ i ] || [];
 			proto.plugins[ i ].push( [ option, set[ i ] ] );
@@ -2227,7 +2227,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 			this.element.trigger( "focus" );
 		}
 
-		return $.ui.mouse.gestion_facture._mouseUp.call( this, event );
+		return $.ui.mouse.prototype._mouseUp.call( this, event );
 	},
 
 	cancel: function() {
@@ -2645,7 +2645,7 @@ $.widget( "ui.draggable", $.ui.mouse, {
 			this.positionAbs = this._convertPositionTo( "absolute" );
 			ui.offset = this.positionAbs;
 		}
-		return $.Widget.gestion_facture._trigger.call( this, type, event, ui );
+		return $.Widget.prototype._trigger.call( this, type, event, ui );
 	},
 
 	plugins: {},
@@ -3875,7 +3875,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 
 			for ( i = 0; i < n.length; i++ ) {
 
-				handle = String.gestion_facture.trim.call( n[ i ] );
+				handle = String.prototype.trim.call( n[ i ] );
 				hname = "ui-resizable-" + handle;
 				axis = $( "<div>" );
 				this._addClass( axis, "ui-resizable-handle " + hname );
@@ -3930,7 +3930,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			}
 		};
 
-		// TODO: make renderAxis a gestion_facture function
+		// TODO: make renderAxis a prototype function
 		this._renderAxis( this.element );
 
 		this._handles = this._handles.add( this.element.find( ".ui-resizable-handle" ) );
@@ -6688,7 +6688,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 	},
 
 	_trigger: function() {
-		if ( $.Widget.gestion_facture._trigger.apply( this, arguments ) === false ) {
+		if ( $.Widget.prototype._trigger.apply( this, arguments ) === false ) {
 			this.cancel();
 		}
 	},
@@ -7995,7 +7995,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 				.filter( ".ui-menu-item" )
 					.filter( function() {
 						return regex.test(
-							String.gestion_facture.trim.call(
+							String.prototype.trim.call(
 								$( this ).children( ".ui-menu-item-wrapper" ).text() ) );
 					} );
 	}
@@ -8238,7 +8238,7 @@ $.widget( "ui.autocomplete", {
 
 				// Announce the value in the liveRegion
 				label = ui.item.attr( "aria-label" ) || item.value;
-				if ( label && String.gestion_facture.trim.call( label ).length ) {
+				if ( label && String.prototype.trim.call( label ).length ) {
 					clearTimeout( this.liveRegionTimer );
 					this.liveRegionTimer = this._delay( function() {
 						this.liveRegion.html( $( "<div>" ).text( label ) );
@@ -8844,7 +8844,7 @@ var widgetsControlgroup = $.widget( "ui.controlgroup", {
 		var result = {};
 		$.each( classes, function( key ) {
 			var current = instance.options.classes[ key ] || "";
-			current = String.gestion_facture.trim.call( current.replace( controlgroupCornerRegex, "" ) );
+			current = String.prototype.trim.call( current.replace( controlgroupCornerRegex, "" ) );
 			result[ key ] = ( current + " " + classes[ key ] ).replace( /\s+/g, " " );
 		} );
 		return result;
@@ -9502,7 +9502,7 @@ if ( $.uiBackCompat === true ) {
 	$.fn.button = ( function( orig ) {
 		return function( options ) {
 			var isMethodCall = typeof options === "string";
-			var args = Array.gestion_facture.slice.call( arguments, 1 );
+			var args = Array.prototype.slice.call( arguments, 1 );
 			var returnValue = this;
 
 			if ( isMethodCall ) {
@@ -9749,7 +9749,7 @@ function Datepicker() {
 	this.dpDiv = datepicker_bindHover( $( "<div id='" + this._mainDivId + "' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>" ) );
 }
 
-$.extend( Datepicker.gestion_facture, {
+$.extend( Datepicker.prototype, {
 
 	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: "hasDatepicker",
@@ -11794,7 +11794,7 @@ $.fn.datepicker = function( options ) {
 		$( "body" ).append( $.datepicker.dpDiv );
 	}
 
-	var otherArgs = Array.gestion_facture.slice.call( arguments, 1 );
+	var otherArgs = Array.prototype.slice.call( arguments, 1 );
 	if ( typeof options === "string" && ( options === "isDisabled" || options === "getDate" || options === "widget" ) ) {
 		return $.datepicker[ "_" + options + "Datepicker" ].
 			apply( $.datepicker, [ this[ 0 ] ].concat( otherArgs ) );
@@ -15740,7 +15740,7 @@ $.widget( "ui.tooltip", {
 		describedby.push( id );
 		elem
 			.data( "ui-tooltip-id", id )
-			.attr( "aria-describedby", String.gestion_facture.trim.call( describedby.join( " " ) ) );
+			.attr( "aria-describedby", String.prototype.trim.call( describedby.join( " " ) ) );
 	},
 
 	_removeDescribedBy: function( elem ) {
@@ -15753,7 +15753,7 @@ $.widget( "ui.tooltip", {
 		}
 
 		elem.removeData( "ui-tooltip-id" );
-		describedby = String.gestion_facture.trim.call( describedby.join( " " ) );
+		describedby = String.prototype.trim.call( describedby.join( " " ) );
 		if ( describedby ) {
 			elem.attr( "aria-describedby", describedby );
 		} else {
@@ -16427,7 +16427,7 @@ function stringParse( string ) {
 	return colors[ string ];
 }
 
-color.fn = jQuery.extend( color.gestion_facture, {
+color.fn = jQuery.extend( color.prototype, {
 	parse: function( red, green, blue, alpha ) {
 		if ( red === undefined ) {
 			this._rgba = [ null, null, null, null ];
@@ -16643,7 +16643,7 @@ color.fn = jQuery.extend( color.gestion_facture, {
 		return this.toRgbaString();
 	}
 } );
-color.fn.parse.gestion_facture = color.fn;
+color.fn.parse.prototype = color.fn;
 
 // hsla conversions adapted from:
 // https://code.google.com/p/maashaack/source/browse/packages/graphics/trunk/src/graphics/colors/HUE2RGB.as?r=5021
