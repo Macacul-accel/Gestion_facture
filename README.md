@@ -12,7 +12,7 @@ L'idée du site est de permettre aux petites entreprises, ainsi que les auto ent
 
 2. **Activer l'environnement virtuel (Optionnel)**
    ```bash
-   python -m venv .env
+   python3.12 -m venv .env
    source .env/bin/activate  # Sur Windows: `.env\Scripts\activate`
    ```
 
